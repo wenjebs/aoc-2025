@@ -41,28 +41,50 @@ def is_invalid(id):
 # left pointer stays at the start
 # kepe track of seen digits, if sth seen appears, e.g for 123123, we see 123, then 1, then we know len of window is 3, then we check from left + 3 to right if the sequence is repeated until the end of the string
 def is_invalid2(id):
-    left = 0
-    right = 0
-    seen = set()
-    window_len = 0
+    # left = 0
+    # right = 0
+    # seen = set()
+    # window_len = 0
 
-    # find a window length with a repeated sequence by expanding window till seeing a seen number then keeping the window length
-    while right < len(id):
-        if id[right] in seen:
-            window_len = right - left
-            break
-        seen.add(id[right])
-        right += 1
+    # we can check every window length from 1 to len(id)
+    
+    # # this is wrong .
+    # # find a window length with a repeated sequence by expanding window till seeing a seen number then keeping the window length
+    # while right < len(id):
+    #     if id[right] in seen:
+    #         window_len = right - left
+    #         break
+    #     seen.add(id[right])
+    #     right += 1
 
-    # no repeated sequence was found
-    if window_len == 0:
-        return False
-    # check if the window length is repeated
-    for i in range(0, len(id) - window_len, window_len):
-        if id[i:i+window_len] != id[i+window_len:i+2*window_len]:
-            return False
-    return True
+    # # no repeated sequence was found
+    # if window_len == 0:
+    #     return False
+    # print(id, window_len)
 
+    #for every window length, check if there exist a repeated sequence
+    # if there is window length that is valid, return True
+
+    def is_valid_window(id, window_len):    
+        for i in range(0, len(id) - window_len, window_len):
+            if id[:window_len] != id[i+window_len:i+2*window_len]:
+                # print("id", id, "checking", id[:window_len], "and", id[i+window_len:i+2*window_len])
+                return False
+        return True
+
+    for window_len in range(1, len(id)):
+
+        # if this loop completes, means the window length is valid
+        if not is_valid_window(id, window_len):
+            continue
+
+        if is_valid_window(id, window_len):
+            return True
+
+    return False
+        
+
+# 112112 112112 
 def solve2(input):
     # split by comma
     ranges = input.split(',')
@@ -73,8 +95,10 @@ def solve2(input):
         # print(type(start), type(end))
         for id in range(int(start), int(end)+1):
             if is_invalid2(str(id)):
-                print(id)
+                print("valid id", id)
                 sol += int(id)
     return sol
 # print(open('input.txt', 'r').read())
 print(solve2(open('input.txt', 'r').read().strip()))
+
+all()
