@@ -57,12 +57,11 @@ def is_invalid2(id):
     # no repeated sequence was found
     if window_len == 0:
         return False
-
     # check if the window length is repeated
-    for i in range(len(id) - window_len):
-        if id[i:i+window_len] == id[i+window_len:i+2*window_len]:
-            return True
-    return False
+    for i in range(0, len(id) - window_len, window_len):
+        if id[i:i+window_len] != id[i+window_len:i+2*window_len]:
+            return False
+    return True
 
 def solve2(input):
     # split by comma
@@ -74,7 +73,8 @@ def solve2(input):
         # print(type(start), type(end))
         for id in range(int(start), int(end)+1):
             if is_invalid2(str(id)):
-                sol += id
+                print(id)
+                sol += int(id)
     return sol
 # print(open('input.txt', 'r').read())
 print(solve2(open('input.txt', 'r').read().strip()))
